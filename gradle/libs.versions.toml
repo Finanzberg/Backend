@@ -1,7 +1,17 @@
 [versions]
 shadow = "8.1.1"
 
+log4j = "2.22.1"
+
 [plugins]
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
 
 [libraries]
+log4j-slf4j2impl = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
+log4j-iostreams = { module = "org.apache.logging.log4j:log4j-iostreams", version.ref = "log4j" }
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
+log4j-jul = { module = "org.apache.logging.log4j:log4j-jul", version.ref = "log4j" }
+log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
+
+[bundles]
+log4j = ["log4j-slf4j2impl", "log4j-iostreams", "log4j-core", "log4j-jul", "log4j-api"]

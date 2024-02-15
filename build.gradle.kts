@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
 import java.io.ByteArrayOutputStream
 import java.util.stream.Stream
 import kotlin.streams.asStream
@@ -14,6 +15,14 @@ version = "1.0.0"
 
 application {
     mainClass.set("de.finanzberg.backend.main.FinanzbergMain")
+}
+
+repositories{
+    mavenCentral()
+}
+
+dependencies{
+    implementation(libs.bundles.log4j)
 }
 
 java {
@@ -42,6 +51,10 @@ tasks{
                 "Git-Branch" to gitRevParse("abbrev-ref"),
                 "Timestamp" to System.currentTimeMillis().toString(),
         )
+    }
+
+    shadowJar {
+        transform(Log4j2PluginsCacheFileTransformer::class.java)
     }
 
     assemble {
