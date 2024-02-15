@@ -5,6 +5,8 @@ import kotlin.streams.asStream
 plugins {
     id("java-library")
     id("application")
+
+    alias(libs.plugins.shadow)
 }
 
 group = "de.finanzberg"
@@ -23,6 +25,13 @@ java {
 }
 
 tasks{
+    withType<JavaCompile> {
+        options.encoding = Charsets.UTF_8.name()
+        options.compilerArgs.add("-Xlint:deprecation")
+        options.compilerArgs.add("-Xlint:unchecked")
+        options.compilerArgs.add("-parameters")
+    }
+
     jar {
         manifest.attributes(
                 "Implementation-Vendor" to "Nik, pianoman911, xlennnix",
@@ -33,6 +42,10 @@ tasks{
                 "Git-Branch" to gitRevParse("abbrev-ref"),
                 "Timestamp" to System.currentTimeMillis().toString(),
         )
+    }
+
+    assemble {
+        dependsOn(shadowJar)
     }
 }
 
