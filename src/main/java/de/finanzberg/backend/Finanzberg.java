@@ -1,0 +1,32 @@
+package de.finanzberg.backend;
+
+import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.text.DecimalFormat;
+
+public class Finanzberg {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger("Finanzberg");
+
+    public void start(long startTime) {
+        try {
+            double bootTime = (System.currentTimeMillis() - startTime) / 1000D;
+            LOGGER.info("Done ({}s)! To stop it, type \"stop\"", new DecimalFormat("#.##").format(bootTime));
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> this.stop(true), "Shutdown Thread"));
+        } catch (Throwable throwable) {
+            LOGGER.error("Error while booting Finanzberg", throwable);
+            stop(false);
+        }
+    }
+
+    public void stop(boolean cleanExit) {
+        LOGGER.info("Stopping Finanzberg...");
+
+        LOGGER.info("Shutting down logger and system! Goodbye (-_-) . z Z");
+        LogManager.shutdown();
+
+        System.exit(cleanExit ? 0 : 1);
+    }
+}

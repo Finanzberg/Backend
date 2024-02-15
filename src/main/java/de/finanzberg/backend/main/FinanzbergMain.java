@@ -1,6 +1,8 @@
 package de.finanzberg.backend.main;
 
+import de.finanzberg.backend.Finanzberg;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.io.IoBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,17 @@ public class FinanzbergMain {
     }
 
     public static void main(String[] args) {
+        try {
+            long startTime = System.currentTimeMillis();
+            Thread.currentThread().setName("Startup Thread");
 
+            LOGGER.info("Booting Finanzberg instance...");
+            Finanzberg finanzberg = new Finanzberg();
+            finanzberg.start(startTime);
+        } catch (Throwable throwable) {
+            LOGGER.error("Error while booting Finanzberg", throwable);
+            LogManager.shutdown();
+            System.exit(1);
+        }
     }
 }
