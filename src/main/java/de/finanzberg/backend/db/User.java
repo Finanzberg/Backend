@@ -17,12 +17,15 @@ public class User {
         this.name = name;
         this.password = password;
         this.finanzberg = finanzberg;
+
+        save();
     }
 
     public void save() {
+
         String passwort = CipherUtils.byteToString(CipherUtils.encryptAES(password, finanzberg.getConfig().key), true);
         try {
-            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO user (email, name, password) VALUES (?,?,?,?) " +
+            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO useraccount (email, name, password) VALUES (?,?,?) " +
                     "ON DUPLICATE KEY UPDATE name=?, password=?");
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, name);
@@ -35,4 +38,13 @@ public class User {
         }
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", finanzberg=" + finanzberg +
+                '}';
+    }
 }

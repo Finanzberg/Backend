@@ -24,6 +24,7 @@ repositories{
 dependencies{
     implementation(libs.bundles.log4j)
     implementation(libs.terminalconsoleappender)
+    implementation("org.jetbrains:annotations:24.0.0")
     runtimeOnly(libs.jline.jansi)
     runtimeOnly(libs.disruptor)
 

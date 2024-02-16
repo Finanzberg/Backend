@@ -24,7 +24,7 @@ public class DBManager {
             connection.prepareStatement("CREATE TABLE IF NOT EXISTS userAccount (" +
                     "email VARCHAR(50) NOT NULL PRIMARY KEY," +
                     "name VARCHAR(50) NOT NULL," +
-                    "password VARCHAR(50) NOT NULL" +
+                    "password VARCHAR(512) NOT NULL" +
                     ");").executeUpdate();
             connection.prepareStatement("CREATE TABLE IF NOT EXISTS bankStatement (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY," +

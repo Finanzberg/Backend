@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import de.finanzberg.backend.config.ConfigLoader;
 import de.finanzberg.backend.config.FinanzbergConfig;
 import de.finanzberg.backend.db.DBManager;
+import de.finanzberg.backend.db.User;
+import de.finanzberg.backend.logic.UserLogic;
 import de.finanzberg.backend.rest.WebServer;
 import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
@@ -20,6 +22,7 @@ public class Finanzberg {
     private static final Path CONFIG_PATH = Path.of("config.yml");
     private FinanzbergConfig config;
     private DBManager dbManager;
+    private UserLogic userLogic;
     private boolean running = true;
 
     public void start(long startTime) {
@@ -29,6 +32,9 @@ public class Finanzberg {
 
             LOGGER.info("Loading DBManager...");
             dbManager = new DBManager(this);
+
+            LOGGER.info("Loading UserLogic...");
+            userLogic = new UserLogic(this);
 
             LOGGER.info("Starting Webserver...");
             new WebServer(this).startBlocking();
