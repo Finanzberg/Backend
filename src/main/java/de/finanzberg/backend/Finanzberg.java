@@ -17,11 +17,15 @@ public class Finanzberg {
     private static final Logger LOGGER = LoggerFactory.getLogger("Finanzberg");
     private static final Path CONFIG_PATH = Path.of("config.yml");
     private FinanzbergConfig config;
+    private boolean running = true;
 
     public void start(long startTime) {
         try {
             LOGGER.info("Loading Finanzberg configuration...");
             this.config = ConfigLoader.loadYamlObject(CONFIG_PATH, FinanzbergConfig.class);
+
+            LOGGER.info("Starting console...");
+            new FinanzbergConsole(this).startThread();
 
             double bootTime = (System.currentTimeMillis() - startTime) / 1000D;
             LOGGER.info("Done ({}s)! To stop it, type \"stop\"", new DecimalFormat("#.##").format(bootTime));
@@ -33,6 +37,9 @@ public class Finanzberg {
     }
 
     public void stop(boolean cleanExit) {
+        if (!this.running) return;
+        this.running = false;
+
         LOGGER.info("Stopping Finanzberg...");
 
         LOGGER.info("Shutting down logger and system! Goodbye (-_-) . z Z");
@@ -42,6 +49,10 @@ public class Finanzberg {
     }
 
     public FinanzbergConfig getConfig() {
-        return config;
+        return this.config;
+    }
+
+    public boolean isRunning() {
+        return this.running;
     }
 }
