@@ -23,6 +23,8 @@ repositories{
 
 dependencies{
     implementation(libs.bundles.log4j)
+    api(libs.google.gson)
+    api(libs.configurate.yaml)
 }
 
 java {
