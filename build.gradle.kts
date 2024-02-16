@@ -24,6 +24,8 @@ repositories{
 dependencies{
     implementation(libs.bundles.log4j)
     implementation(libs.terminalconsoleappender)
+    runtimeOnly(libs.jline.jansi)
+    runtimeOnly(libs.disruptor)
 
     api(libs.google.gson)
     api(libs.configurate.yaml)
