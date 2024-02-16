@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.finanzberg.backend.config.ConfigLoader;
 import de.finanzberg.backend.config.FinanzbergConfig;
+import de.finanzberg.backend.rest.WebServer;
 import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,10 @@ public class Finanzberg {
         try {
             LOGGER.info("Loading Finanzberg configuration...");
             this.config = ConfigLoader.loadYamlObject(CONFIG_PATH, FinanzbergConfig.class);
+
+
+            LOGGER.info("Starting Webserver...");
+            new WebServer(this).startBlocking();
 
             LOGGER.info("Starting console...");
             new FinanzbergConsole(this).startThread();
