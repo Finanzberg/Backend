@@ -1,25 +1,24 @@
-import java.io.FileInputStream;
-import java.io.IOException;
+package de.finanzberg.backend.db;
+
+import de.finanzberg.backend.Finanzberg;
+import de.finanzberg.backend.config.FinanzbergConfig;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class DBManager {
-    private static DBManager dbManager = new DBManager();
     private Connection connection = null;
 
+    private final Finanzberg finanzberg ;
 
-    private DBManager() {
-        Properties properties = new Properties();
-        try {
-            properties.load(new FileInputStream("src/config.properties"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public DBManager(Finanzberg finanzberg) {
+        this.finanzberg = finanzberg;
+        FinanzbergConfig.MySql mysql = finanzberg.getConfig().mysql;
+
 
         //Aufbau einer Connection zur Datenbank
-        initConnection(properties.getProperty("dbHost"), Integer.parseInt(properties.getProperty("dbPort")), properties.getProperty("dbSchema"), properties.getProperty("dbUser"), properties.getProperty("dbPw"));
+        initConnection(mysql.host, mysql.port, mysql.database, mysql.username, mysql.password);
         //Kreieren der DB wen nicht vorhanden
         try {
             connection.prepareStatement("CREATE TABLE IF NOT EXISTS userAccount (" +
@@ -55,12 +54,8 @@ public class DBManager {
         }
     }
 
-    public static DBManager getInstance() {
-        return dbManager;
-    }
-
     public void removeConnection() {
-        if (dbManager != null && this.connection != null) {
+        if (this.connection != null) {
             try {
                 this.connection.close();
             } catch (SQLException e) {
@@ -74,12 +69,11 @@ public class DBManager {
     }
 
     private void initConnection(String host, int port, String schema, String user, String pwd) {
-        String dbUrl = "jdbc:mysql://" + host + ":" + port + "/" + schema;
+        String dbUrl = "jdbc:mariadb://" + host + ":" + port + "/" + schema;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
             // mit MySQL verbinden
             connection = DriverManager.getConnection(dbUrl, user, pwd);
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 

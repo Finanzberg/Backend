@@ -29,6 +29,8 @@ dependencies{
 
     api(libs.google.gson)
     api(libs.configurate.yaml)
+
+    api(libs.mariaDB)
 }
 
 java {
