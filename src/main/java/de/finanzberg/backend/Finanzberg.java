@@ -1,5 +1,7 @@
 package de.finanzberg.backend;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import de.finanzberg.backend.config.ConfigLoader;
 import de.finanzberg.backend.config.FinanzbergConfig;
 import org.apache.logging.log4j.LogManager;
@@ -11,6 +13,7 @@ import java.text.DecimalFormat;
 
 public class Finanzberg {
 
+    public static final Gson GSON = new GsonBuilder().serializeNulls().create();
     private static final Logger LOGGER = LoggerFactory.getLogger("Finanzberg");
     private static final Path CONFIG_PATH = Path.of("config.yml");
     private FinanzbergConfig config;

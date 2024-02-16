@@ -6,6 +6,8 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ConfigSerializable
 public class FinanzbergConfig {
 
+    public Web web = new Web();
+    public MySql mysql = new MySql();
 
     @ConfigSerializable
     public static class Web {
