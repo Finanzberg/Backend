@@ -19,6 +19,7 @@ public class Finanzberg {
     private static final Logger LOGGER = LoggerFactory.getLogger("Finanzberg");
     private static final Path CONFIG_PATH = Path.of("config.yml");
     private FinanzbergConfig config;
+    private DBManager dbManager;
     private boolean running = true;
 
     public void start(long startTime) {
@@ -27,7 +28,7 @@ public class Finanzberg {
             this.config = ConfigLoader.loadYamlObject(CONFIG_PATH, FinanzbergConfig.class);
 
             LOGGER.info("Loading DBManager...");
-            new DBManager(this);
+            dbManager = new DBManager(this);
 
             LOGGER.info("Starting Webserver...");
             new WebServer(this).startBlocking();
@@ -59,7 +60,9 @@ public class Finanzberg {
     public FinanzbergConfig getConfig() {
         return this.config;
     }
-
+    public DBManager getDBManager(){
+        return dbManager;
+    }
     public boolean isRunning() {
         return this.running;
     }
