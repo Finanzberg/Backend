@@ -1,6 +1,8 @@
 package de.finanzberg.backend.config;
 
+import de.finanzberg.backend.util.CipherUtils;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @SuppressWarnings("FieldMayBeFinal")
 @ConfigSerializable
@@ -8,6 +10,9 @@ public class FinanzbergConfig {
 
     public Web web = new Web();
     public MySql mysql = new MySql();
+
+    @Comment("The secret key used to encrypt the passwords")
+    public String key = CipherUtils.byteToString(CipherUtils.generateKey(), false);
 
     @ConfigSerializable
     public static class Web {
