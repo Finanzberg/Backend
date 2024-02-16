@@ -177,7 +177,8 @@ fabric.properties
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -456,3 +457,6 @@ next-env.d.ts
 
 # Ignore Gradle build output directory
 build
+
+## Manually added exclusions
+config.yml
