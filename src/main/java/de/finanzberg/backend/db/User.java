@@ -4,13 +4,15 @@ import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.util.CipherUtils;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.util.UUID;
 
 public class User {
+    private final Finanzberg finanzberg;
+    private final UUID session = UUID.randomUUID();
     private String email;
     private String name;
     private String password;
-    private Finanzberg finanzberg;
+
 
     public User(String email, String name, String password, Finanzberg finanzberg) {
         this.email = email;
@@ -36,6 +38,22 @@ public class User {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public UUID getSession() {
+        return session;
     }
 
     @Override

@@ -2,6 +2,7 @@ package de.finanzberg.backend.rest;
 
 import com.sun.net.httpserver.HttpServer;
 import de.finanzberg.backend.Finanzberg;
+import de.finanzberg.backend.rest.api.v1.ApiV1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,8 @@ public class WebServer extends Thread {
 
             LOGGER.info("Creating contexts...");
 
-            server.createContext("/", new RootHandler());
+            server.createContext("/", new RootHandler(this.finanzberg));
+            ApiV1.register("/", server, this.finanzberg);
 
             AtomicInteger threadCount = new AtomicInteger(1);
             server.setExecutor(Executors.newCachedThreadPool(r -> {

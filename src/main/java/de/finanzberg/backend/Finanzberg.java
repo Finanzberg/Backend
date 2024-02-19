@@ -66,9 +66,15 @@ public class Finanzberg {
     public FinanzbergConfig getConfig() {
         return this.config;
     }
+
     public DBManager getDBManager(){
         return dbManager;
     }
+
+    public UserLogic getUserLogic(){
+        return userLogic;
+    }
+
     public boolean isRunning() {
         return this.running;
     }
