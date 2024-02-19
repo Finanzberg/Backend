@@ -4,13 +4,11 @@ import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import de.finanzberg.backend.Finanzberg;
-import de.finanzberg.backend.db.User;
 import de.finanzberg.backend.util.StreamUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.UUID;
 
 public abstract class AbstractWebHandler implements HttpHandler {
 
@@ -67,16 +65,5 @@ public abstract class AbstractWebHandler implements HttpHandler {
             return new String[0];
         }
         return cookie.split(";");
-    }
-
-    protected User checkSession(HttpExchange exchange) {
-        String[] cookies = getCookies(exchange);
-        for (String c : cookies) {
-            if (c.startsWith("session=")) {
-                String session = c.substring(8);
-                return this.finanzberg.getUserLogic().checkSession(UUID.fromString(session));
-            }
-        }
-        return null;
     }
 }

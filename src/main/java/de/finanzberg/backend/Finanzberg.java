@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import de.finanzberg.backend.config.ConfigLoader;
 import de.finanzberg.backend.config.FinanzbergConfig;
 import de.finanzberg.backend.db.DBManager;
-import de.finanzberg.backend.db.User;
 import de.finanzberg.backend.logic.UserLogic;
 import de.finanzberg.backend.rest.WebServer;
 import org.apache.logging.log4j.LogManager;
@@ -67,11 +66,11 @@ public class Finanzberg {
         return this.config;
     }
 
-    public DBManager getDBManager(){
+    public DBManager getDBManager() {
         return dbManager;
     }
 
-    public UserLogic getUserLogic(){
+    public UserLogic getUserLogic() {
         return userLogic;
     }
 

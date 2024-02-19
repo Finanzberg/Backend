@@ -16,14 +16,16 @@ public class AccountChange extends AuthedWebHandler {
         JsonObject request = this.getRequestBody(exchange);
         String name;
         String password;
+        String avatar;
         try {
             name = request.get("name").getAsString();
             password = request.get("password").getAsString();
+            avatar = request.get("avatar").getAsString();
         } catch (Exception ignored) {
             exchange.sendResponseHeaders(400, -1);
             return;
         }
-        boolean changed = this.finanzberg.getUserLogic().changeUser(name, password);
+        boolean changed = this.finanzberg.getUserLogic().changeUser(name, password, avatar);
         if (!changed) {
             exchange.sendResponseHeaders(400, -1);
             return;

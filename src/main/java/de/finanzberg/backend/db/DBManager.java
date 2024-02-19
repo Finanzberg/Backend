@@ -2,15 +2,18 @@ package de.finanzberg.backend.db;
 
 import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.config.FinanzbergConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBManager {
-    private Connection connection = null;
 
-    private final Finanzberg finanzberg ;
+    private static final Logger LOGGER = LoggerFactory.getLogger("Finanzberg-DB");
+    private final Finanzberg finanzberg;
+    private Connection connection = null;
 
     public DBManager(Finanzberg finanzberg) {
         this.finanzberg = finanzberg;
@@ -50,8 +53,8 @@ public class DBManager {
                     "FOREIGN KEY (userAccount_email) REFERENCES userAccount(email)" +
                     "ON DELETE CASCADE " +
                     ");").executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            LOGGER.error("Error while creating tables", exception);
         }
     }
 
@@ -59,8 +62,8 @@ public class DBManager {
         if (this.connection != null) {
             try {
                 this.connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException exception) {
+                LOGGER.error("Error while closing connection", exception);
             }
         }
     }
@@ -74,11 +77,9 @@ public class DBManager {
         try {
             // mit MySQL verbinden
             connection = DriverManager.getConnection(dbUrl, user, pwd);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            LOGGER.error("Error while connecting to database", exception);
         }
-
     }
-
 }
 
