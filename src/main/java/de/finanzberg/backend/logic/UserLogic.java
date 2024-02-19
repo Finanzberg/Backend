@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 public class UserLogic {
 
@@ -24,12 +23,12 @@ public class UserLogic {
         this.finanzberg = finanzberg;
     }
 
-    public User login(String email, String passwort) {
-        passwort = CipherUtils.byteToString(CipherUtils.encryptAES(passwort, finanzberg.getConfig().key), true);
+    public User login(String email, String password) {
+        password = CipherUtils.byteToString(CipherUtils.encryptAES(password, finanzberg.getConfig().key), true);
         try {
             PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("SELECT * FROM useraccount WHERE email = ? AND password = ?");
             preparedStatement.setString(1, email);
-            preparedStatement.setString(2, passwort);
+            preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 User user = new User(resultSet.getString("email"), resultSet.getString("name"), CipherUtils.decryptAES(CipherUtils.stringToByte(resultSet.getString("password"), true), finanzberg.getConfig().key), finanzberg);
@@ -47,12 +46,13 @@ public class UserLogic {
         return this.activeUsers.getIfPresent(session);
     }
 
-    public boolean createUser(String email, String name, String password) {
+    public boolean createUser(String email, String name, String password, String avatar) {
         try {
-            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO useraccount (email, name, password) VALUES (?, ?, ?)");
+            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO useraccount (email, name, password,avatar) VALUES (?, ?, ?,?)");
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, name);
             preparedStatement.setString(3, CipherUtils.byteToString(CipherUtils.encryptAES(password, finanzberg.getConfig().key), true));
+            preparedStatement.setString(4, CipherUtils.byteToString(CipherUtils.encryptAES(avatar, finanzberg.getConfig().key), true));
 
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException ignored) {
@@ -75,11 +75,12 @@ public class UserLogic {
         }
     }
 
-    public boolean changeUser(String name, String password) {
+    public boolean changeUser(String name, String password,String avatar) {
         try {
-            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("UPDATE useraccount SET name = ? WHERE password = ?");
+            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("UPDATE useraccount SET name = ?, password = ?, avatar = ? WHERE email = ?");
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, CipherUtils.byteToString(CipherUtils.encryptAES(password, finanzberg.getConfig().key), true));
+            preparedStatement.setString(3, CipherUtils.byteToString(CipherUtils.encryptAES(avatar, finanzberg.getConfig().key), true));
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException ignored) {
             return false;

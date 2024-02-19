@@ -17,15 +17,17 @@ public class AccountCreate extends AbstractWebHandler {
         String email;
         String name;
         String password;
+        String avatar;
         try {
             email = request.get("email").getAsString();
             name = request.get("name").getAsString();
             password = request.get("password").getAsString();
+            avatar = request.get("avatar").getAsString();
         } catch (Exception ignored) {
             exchange.sendResponseHeaders(400, -1);
             return;
         }
-        boolean created = this.finanzberg.getUserLogic().createUser(email, name, password);
+        boolean created = this.finanzberg.getUserLogic().createUser(email, name, password, avatar);
         if (!created) {
             exchange.sendResponseHeaders(400, -1);
             return;

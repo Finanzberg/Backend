@@ -36,6 +36,8 @@ public class AccountAuth extends AbstractWebHandler {
         UUID session = user.getSession();
         JsonObject response = new JsonObject();
         response.addProperty("session", session.toString());
+        response.add("user", user.toJson());
+
         exchange.sendResponseHeaders(200, 0);
         exchange.getResponseBody().write(response.toString().getBytes());
 

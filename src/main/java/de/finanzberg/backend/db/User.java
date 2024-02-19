@@ -1,5 +1,6 @@
 package de.finanzberg.backend.db;
 
+import com.google.gson.JsonObject;
 import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.util.CipherUtils;
 
@@ -12,28 +13,32 @@ public class User {
     private String email;
     private String name;
     private String password;
+    private String avatar;
 
 
-    public User(String email, String name, String password, Finanzberg finanzberg) {
+    public User(String email, String name, String password, String avatar, Finanzberg finanzberg) {
         this.email = email;
         this.name = name;
         this.password = password;
+        this.avatar = avatar;
         this.finanzberg = finanzberg;
 
         save();
     }
 
     public void save() {
-
-        String passwort = CipherUtils.byteToString(CipherUtils.encryptAES(password, finanzberg.getConfig().key), true);
+        String password = CipherUtils.byteToString(CipherUtils.encryptAES(this.password, finanzberg.getConfig().key), true);
+        String avatar = CipherUtils.byteToString(CipherUtils.encryptAES(this.avatar, finanzberg.getConfig().key), true);
         try {
-            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO useraccount (email, name, password) VALUES (?,?,?) " +
-                    "ON DUPLICATE KEY UPDATE name=?, password=?");
+            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO useraccount (email, name, password, avatar) VALUES (?,?,?,?) " +
+                    "ON DUPLICATE KEY UPDATE name=?, password=?, avatar=?");
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, name);
-            preparedStatement.setString(3, passwort);
-            preparedStatement.setString(4, name);
-            preparedStatement.setString(5, passwort);
+            preparedStatement.setString(3, password);
+            preparedStatement.setString(4, avatar);
+            preparedStatement.setString(5, name);
+            preparedStatement.setString(6, password);
+            preparedStatement.setString(7, avatar);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,8 +57,20 @@ public class User {
         return password;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
     public UUID getSession() {
         return session;
+    }
+
+    public JsonObject toJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("email", email);
+        json.addProperty("name", name);
+        json.addProperty("avatar", avatar);
+        return json;
     }
 
     @Override
