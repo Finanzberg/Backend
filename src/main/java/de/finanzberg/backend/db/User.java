@@ -5,6 +5,8 @@ import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.util.CipherUtils;
 
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class User {
@@ -14,6 +16,7 @@ public class User {
     private String name;
     private String password;
     private String avatar;
+    private List<BankStatement> bankStatements =new ArrayList<>();
 
     public User(String email, String name, String password, String avatar, Finanzberg finanzberg) {
         this.email = email;
@@ -42,6 +45,7 @@ public class User {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        BankStatement.save(this,finanzberg,bankStatements);
     }
 
     public String getEmail() {
