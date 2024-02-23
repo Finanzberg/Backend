@@ -2,17 +2,16 @@ package de.finanzberg.backend.db;
 
 import com.google.gson.JsonObject;
 import de.finanzberg.backend.Finanzberg;
-import de.finanzberg.backend.util.CipherUtils;
-
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.time.Instant;
 import java.util.Collection;
-import java.util.UUID;
 
 public class BankStatement {
     private final Finanzberg finanzberg;
     private int id;
+    private int bankInternalId;
+    private String bankName;
     private Instant date;
     private String description;
     private double withdrawal;
@@ -22,9 +21,11 @@ public class BankStatement {
     private BankStatementCategory category;
 
 
-    public BankStatement(Finanzberg finanzberg, int id, Instant date, String description, double withdrawal, double deposit, double balance, String analysedName, BankStatementCategory category) {
+    public BankStatement(Finanzberg finanzberg, int id, int bankInternalId, String bankName, Instant date, String description, double withdrawal, double deposit, double balance, String analysedName, BankStatementCategory category) {
         this.finanzberg = finanzberg;
         this.id = id;
+        this.bankInternalId = bankInternalId;
+        this.bankName = bankName;
         this.date = date;
         this.description = description;
         this.withdrawal = withdrawal;
@@ -39,8 +40,8 @@ public class BankStatement {
             return;
         }
         try {
-            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO bankStatement (date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?) " +
-                    "ON DUPLICATE KEY UPDATE name=?, password=?, avatar=?");
+            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO bankStatement (bankInternalId,bankname,date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?,?,?) " +
+                    "ON DUPLICATE KEY UPDATE name=name");
             for (BankStatement statement : statements) {
                 statement.save(user,preparedStatement);
             }
@@ -52,16 +53,19 @@ public class BankStatement {
 
     public void save(User user, PreparedStatement preparedStatementUser) {
         try {
-            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO bankStatement (date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?) " +
-                    "ON DUPLICATE KEY UPDATE name=?, password=?, avatar=?");
-            preparedStatement.setDate(1, new Date(date.toEpochMilli()));
-            preparedStatement.setString(2, description);
-            preparedStatement.setDouble(3, withdrawal);
-            preparedStatement.setDouble(4, deposit);
-            preparedStatement.setDouble(5, balance);
-            preparedStatement.setString(6, analysedName);
-            preparedStatement.setString(7, category.name());
-            preparedStatement.setString(7, user.getEmail());
+            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO bankStatement (bankInternalId,bankname,date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?,?,?) " +
+                    "ON DUPLICATE KEY UPDATE name=name");
+
+            preparedStatement.setInt(1, bankInternalId);
+            preparedStatement.setString(2, bankName);
+            preparedStatement.setDate(3, new Date(date.toEpochMilli()));
+            preparedStatement.setString(4, description);
+            preparedStatement.setDouble(5, withdrawal);
+            preparedStatement.setDouble(6, deposit);
+            preparedStatement.setDouble(7, balance);
+            preparedStatement.setString(8, analysedName);
+            preparedStatement.setString(9, category.name());
+            preparedStatement.setString(10, user.getEmail());
             preparedStatement.addBatch();
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,6 +77,8 @@ public class BankStatement {
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("id", id);
+        json.addProperty("bankInternalId",bankInternalId);
+        json.addProperty("bankName",bankName);
         json.addProperty("date", date.toEpochMilli());
         json.addProperty("description", description);
         json.addProperty("withdrawal",withdrawal);
@@ -88,6 +94,8 @@ public class BankStatement {
         return "BankStatement{" +
                 "finanzberg=" + finanzberg +
                 ", id=" + id +
+                ", bankInternalId=" + bankInternalId +
+                ", bankName='" + bankName + '\'' +
                 ", date=" + date +
                 ", description='" + description + '\'' +
                 ", withdrawal=" + withdrawal +

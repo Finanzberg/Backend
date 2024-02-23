@@ -32,6 +32,8 @@ public class DBManager {
                     ");").executeUpdate();
             connection.prepareStatement("CREATE TABLE IF NOT EXISTS bankStatement (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY," +
+                    "bankInternalId INT PRIMARY KEY," +
+                    "bankname VARCHAR(50) PRIMARY KEY," +
                     "date DATE NOT NULL," +
                     "description VARCHAR(300)," +
                     "withdrawal DOUBLE(30,2)," +
@@ -46,7 +48,7 @@ public class DBManager {
             connection.prepareStatement("CREATE TABLE IF NOT EXISTS budget (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY," +
                     "name VARCHAR(300) NOT NULL," +
-                    "percentage INT," +
+                    "monthlyBalance INT," +
                     "balance DOUBLE(30,2)," +
                     "startDate DATE NOT NULL," +
                     "userAccount_email VARCHAR(50)," +
