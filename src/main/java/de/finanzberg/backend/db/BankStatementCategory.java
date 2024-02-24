@@ -16,9 +16,7 @@ public enum BankStatementCategory {
 
     // INCOME
     SALARY,
-    PERSONAL_PAYMENT,
     UNEMPLOYMENT_BENEFIT,
     CHILD_BENEFIT,
-    OTHER,
     
 }

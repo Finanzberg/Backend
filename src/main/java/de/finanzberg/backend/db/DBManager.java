@@ -42,7 +42,7 @@ public class DBManager {
                     "analysedName VARCHAR(50)," +
                     "category VARCHAR(50)," +
                     "userAccount_email VARCHAR(50)," +
-                    "PRIMARY KEY (id, bankInternalId, bankname)"
+                    "PRIMARY KEY (id, bankInternalId, bankname)," +
                     "FOREIGN KEY (userAccount_email) REFERENCES userAccount(email)" +
                     "ON DELETE CASCADE " +
                     ");").executeUpdate();
