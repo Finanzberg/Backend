@@ -18,6 +18,7 @@ public class FinanzbergConfig {
     public static class Web {
         public int port = 8080;
         public long sessionMaxAgeMinutes = 60 * 24 * 3; // 3 days
+        public String origin = "*";
 
     }
 

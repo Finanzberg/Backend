@@ -20,8 +20,8 @@ public abstract class AbstractWebHandler implements HttpHandler {
         this.finanzberg = finanzberg;
     }
 
-    private static boolean checkCors(HttpExchange exchange) {
-        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+    private static boolean checkCors(HttpExchange exchange, Finanzberg finanzberg) {
+        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", finanzberg.getConfig().web.origin);
         exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "*");
         exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "*");
         exchange.getResponseHeaders().add("Access-Control-Allow-Credentials", "true");
@@ -42,7 +42,7 @@ public abstract class AbstractWebHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try (exchange) { // close the exchange automatically after handling
-            if (checkCors(exchange)) {
+            if (checkCors(exchange, this.finanzberg)) {
                 return;
             }
             this.handleRequest(exchange);
