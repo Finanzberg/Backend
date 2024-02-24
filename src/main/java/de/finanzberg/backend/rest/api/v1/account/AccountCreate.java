@@ -5,6 +5,9 @@ import com.sun.net.httpserver.HttpExchange;
 import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.db.User;
 import de.finanzberg.backend.rest.AbstractWebHandler;
+import de.finanzberg.backend.util.StreamUtils;
+
+import java.util.stream.Stream;
 
 public class AccountCreate extends AbstractWebHandler {
 
@@ -43,6 +46,8 @@ public class AccountCreate extends AbstractWebHandler {
         JsonObject response = new JsonObject();
         response.addProperty("session", user.getSession().toString());
         response.add("user", user.toJson());
+
+        StreamUtils.writeJsonFully(response, exchange.getResponseBody());
         exchange.sendResponseHeaders(201, 0);
     }
 }
