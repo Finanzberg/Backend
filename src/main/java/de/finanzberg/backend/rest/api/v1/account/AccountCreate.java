@@ -3,6 +3,7 @@ package de.finanzberg.backend.rest.api.v1.account;
 import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import de.finanzberg.backend.Finanzberg;
+import de.finanzberg.backend.db.User;
 import de.finanzberg.backend.rest.AbstractWebHandler;
 
 public class AccountCreate extends AbstractWebHandler {
@@ -32,6 +33,16 @@ public class AccountCreate extends AbstractWebHandler {
             exchange.sendResponseHeaders(400, -1);
             return;
         }
+
+        User user = this.finanzberg.getUserLogic().login(email, password);
+        if (user == null) {
+            exchange.sendResponseHeaders(500, -1); // this should never happen
+            return;
+        }
+
+        JsonObject response = new JsonObject();
+        response.addProperty("session", user.getSession().toString());
+        response.add("user", user.toJson());
         exchange.sendResponseHeaders(201, 0);
     }
 }

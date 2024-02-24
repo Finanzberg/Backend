@@ -40,6 +40,5 @@ public class AccountAuth extends AbstractWebHandler {
 
         exchange.sendResponseHeaders(200, 0);
         exchange.getResponseBody().write(response.toString().getBytes());
-
     }
 }
