@@ -15,12 +15,13 @@ import java.util.concurrent.TimeUnit;
 public class UserLogic {
 
     private final Finanzberg finanzberg;
-    private final Cache<UUID, User> activeUsers = Caffeine.newBuilder()
-            .expireAfterAccess(30, TimeUnit.MINUTES)
-            .build();
+    private final Cache<UUID, User> activeUsers;
 
     public UserLogic(Finanzberg finanzberg) {
         this.finanzberg = finanzberg;
+        this.activeUsers = Caffeine.newBuilder()
+                .expireAfterAccess(finanzberg.getConfig().web.sessionMaxAgeMinutes, TimeUnit.MINUTES)
+                .build();
     }
 
     public User login(String email, String password) {
