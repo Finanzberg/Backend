@@ -32,6 +32,6 @@ public class AccountCreate extends AbstractWebHandler {
             exchange.sendResponseHeaders(400, -1);
             return;
         }
-        exchange.sendResponseHeaders(200, 0);
+        exchange.sendResponseHeaders(201, 0);
     }
 }
