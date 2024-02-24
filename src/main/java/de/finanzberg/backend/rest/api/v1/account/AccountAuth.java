@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpExchange;
 import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.db.User;
 import de.finanzberg.backend.rest.AbstractWebHandler;
+import de.finanzberg.backend.util.StreamUtils;
 
 import java.util.UUID;
 
@@ -39,6 +40,6 @@ public class AccountAuth extends AbstractWebHandler {
         response.add("user", user.toJson());
 
         exchange.sendResponseHeaders(200, 0);
-        exchange.getResponseBody().write(response.toString().getBytes());
+        StreamUtils.writeJsonFully(response, exchange.getResponseBody());
     }
 }
