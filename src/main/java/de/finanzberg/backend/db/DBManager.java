@@ -31,9 +31,9 @@ public class DBManager {
                     "avatar MEDIUMTEXT NOT NULL" +
                     ");").executeUpdate();
             connection.prepareStatement("CREATE TABLE IF NOT EXISTS bankStatement (" +
-                    "id INT AUTO_INCREMENT PRIMARY KEY," +
-                    "bankInternalId INT PRIMARY KEY," +
-                    "bankname VARCHAR(50) PRIMARY KEY," +
+                    "id INT AUTO_INCREMENT," +
+                    "bankInternalId INT," +
+                    "bankname VARCHAR(50)," +
                     "date DATE NOT NULL," +
                     "description VARCHAR(300)," +
                     "withdrawal DOUBLE(30,2)," +
@@ -42,6 +42,7 @@ public class DBManager {
                     "analysedName VARCHAR(50)," +
                     "category VARCHAR(50)," +
                     "userAccount_email VARCHAR(50)," +
+                    "PRIMARY KEY (id, bankInternalId, bankname)"
                     "FOREIGN KEY (userAccount_email) REFERENCES userAccount(email)" +
                     "ON DELETE CASCADE " +
                     ");").executeUpdate();
