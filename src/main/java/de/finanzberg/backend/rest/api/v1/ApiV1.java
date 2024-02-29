@@ -9,6 +9,7 @@ import de.finanzberg.backend.rest.api.v1.account.AccountDelete;
 import de.finanzberg.backend.rest.api.v1.account.AccountSession;
 import de.finanzberg.backend.rest.api.v1.data.SelectBudgets;
 import de.finanzberg.backend.rest.api.v1.data.SelectStatements;
+import de.finanzberg.backend.rest.api.v1.data.UploadCSV;
 
 public class ApiV1 {
 
@@ -25,5 +26,6 @@ public class ApiV1 {
         // Data
         server.createContext(parent + PATH + "data/budgets", new SelectBudgets(finanzberg));
         server.createContext(parent + PATH + "data/statements", new SelectStatements(finanzberg));
+        server.createContext(parent + PATH + "data/upload/csv", new UploadCSV(finanzberg));
     }
 }
