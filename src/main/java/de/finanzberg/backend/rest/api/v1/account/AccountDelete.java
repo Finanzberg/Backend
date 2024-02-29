@@ -3,6 +3,7 @@ package de.finanzberg.backend.rest.api.v1.account;
 import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import de.finanzberg.backend.Finanzberg;
+import de.finanzberg.backend.db.User;
 import de.finanzberg.backend.rest.AuthedWebHandler;
 
 public class AccountDelete extends AuthedWebHandler {
@@ -12,7 +13,7 @@ public class AccountDelete extends AuthedWebHandler {
     }
 
     @Override
-    public void handleAuthedRequest(HttpExchange exchange) throws Throwable {
+    public void handleAuthedRequest(HttpExchange exchange, User user) throws Throwable {
         JsonObject request = this.getRequestBody(exchange);
         String email;
         String password;

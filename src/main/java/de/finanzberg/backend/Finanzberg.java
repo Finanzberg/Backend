@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import de.finanzberg.backend.config.ConfigLoader;
 import de.finanzberg.backend.config.FinanzbergConfig;
 import de.finanzberg.backend.db.DBManager;
+import de.finanzberg.backend.logic.DataLogic;
 import de.finanzberg.backend.logic.UserLogic;
 import de.finanzberg.backend.rest.WebServer;
 import org.apache.logging.log4j.LogManager;
@@ -22,6 +23,7 @@ public class Finanzberg {
     private FinanzbergConfig config;
     private DBManager dbManager;
     private UserLogic userLogic;
+    private DataLogic dataLogic;
     private boolean running = true;
 
     public void start(long startTime) {
@@ -34,6 +36,9 @@ public class Finanzberg {
 
             LOGGER.info("Loading UserLogic...");
             userLogic = new UserLogic(this);
+
+            LOGGER.info("Loading DataLogic...");
+            dataLogic = new DataLogic(this);
 
             LOGGER.info("Starting Webserver...");
             new WebServer(this).startBlocking();
@@ -72,6 +77,10 @@ public class Finanzberg {
 
     public UserLogic getUserLogic() {
         return userLogic;
+    }
+
+    public DataLogic getDataLogic() {
+        return dataLogic;
     }
 
     public boolean isRunning() {

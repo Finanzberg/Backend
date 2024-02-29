@@ -2,14 +2,20 @@ package de.finanzberg.backend.db;
 
 import com.google.gson.JsonObject;
 import de.finanzberg.backend.Finanzberg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Collection;
 
 public class BankStatement {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger("BankStatement");
+
     private final Finanzberg finanzberg;
     private int id;
     private int bankInternalId;
@@ -37,44 +43,29 @@ public class BankStatement {
         this.category = category;
     }
 
-    public static void save(User user, Finanzberg finanzberg, Collection<BankStatement> statements) {
-        if (statements.isEmpty()) {
-            return;
-        }
+    public static void save(User user, Finanzberg finanzberg) {
         try (Connection connection = finanzberg.getDBManager().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO bankStatement (bankInternalId,bankname,date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?,?,?) " +
                      "ON DUPLICATE KEY UPDATE name=name");
         ) {
-            for (BankStatement statement : statements) {
-                statement.save(user, preparedStatement);
-            }
             preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception exception) {
+            LOGGER.error("Error while saving bank statements", exception);
         }
     }
 
-    public void save(User user, PreparedStatement preparedStatementUser) {
-        try (Connection connection = finanzberg.getDBManager().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO bankStatement (bankInternalId,bankname,date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?,?,?) " +
-                    "ON DUPLICATE KEY UPDATE name=name");
-        ) {
-
-
-            preparedStatement.setInt(1, bankInternalId);
-            preparedStatement.setString(2, bankName);
-            preparedStatement.setDate(3, new Date(date.toEpochMilli()));
-            preparedStatement.setString(4, description);
-            preparedStatement.setDouble(5, withdrawal);
-            preparedStatement.setDouble(6, deposit);
-            preparedStatement.setDouble(7, balance);
-            preparedStatement.setString(8, analysedName);
-            preparedStatement.setString(9, category.name());
-            preparedStatement.setString(10, user.getEmail());
-            preparedStatement.addBatch();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void save(User user, PreparedStatement statement) throws SQLException {
+        statement.setInt(1, bankInternalId);
+        statement.setString(2, bankName);
+        statement.setDate(3, new Date(date.toEpochMilli()));
+        statement.setString(4, description);
+        statement.setDouble(5, withdrawal);
+        statement.setDouble(6, deposit);
+        statement.setDouble(7, balance);
+        statement.setString(8, analysedName);
+        statement.setString(9, category.name());
+        statement.setString(10, user.getEmail());
+        statement.addBatch();
     }
 
 

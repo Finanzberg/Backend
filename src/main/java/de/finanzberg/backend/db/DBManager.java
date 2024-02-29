@@ -31,7 +31,7 @@ public class DBManager {
 
             //Kreieren der DB wen nicht vorhanden
             LOGGER.info("Creating default tables...");
-            try(Connection connection = this.dataSource.getConnection()) {
+            try (Connection connection = this.dataSource.getConnection()) {
                 connection.prepareStatement("CREATE TABLE IF NOT EXISTS userAccount (" +
                         "email VARCHAR(50) NOT NULL PRIMARY KEY," +
                         "name VARCHAR(50) NOT NULL," +

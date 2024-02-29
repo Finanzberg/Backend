@@ -16,7 +16,7 @@ public abstract class AuthedWebHandler extends AbstractWebHandler {
     public void handleRequest(HttpExchange exchange) throws Throwable {
         User user = checkSession(exchange);
         if (user != null) {
-            handleAuthedRequest(exchange);
+            handleAuthedRequest(exchange, user);
         } else {
             exchange.sendResponseHeaders(401, -1);
         }
@@ -33,5 +33,5 @@ public abstract class AuthedWebHandler extends AbstractWebHandler {
         return null;
     }
 
-    public abstract void handleAuthedRequest(HttpExchange exchange) throws Throwable;
+    public abstract void handleAuthedRequest(HttpExchange exchange, User user) throws Throwable;
 }

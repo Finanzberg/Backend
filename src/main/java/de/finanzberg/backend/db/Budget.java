@@ -25,40 +25,6 @@ public class Budget {
         this.startDate = startDate;
     }
 
-    public static void save(User user, Finanzberg finanzberg, Collection<BankStatement> statements){
-        if (statements.isEmpty()){
-            return;
-        }
-        try {
-            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO bankStatement (date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?) " +
-                    "ON DUPLICATE KEY UPDATE name=?, password=?, avatar=?");
-            for (BankStatement statement : statements) {
-                statement.save(user,preparedStatement);
-            }
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void save(User user, PreparedStatement preparedStatementUser) {
-        try {
-            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO bankStatement (date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?) " +
-                    "ON DUPLICATE KEY UPDATE name=?, password=?, avatar=?");
-            preparedStatement.setDate(1, new Date(date.toEpochMilli()));
-            preparedStatement.setString(2, description);
-            preparedStatement.setDouble(3, withdrawal);
-            preparedStatement.setDouble(4, deposit);
-            preparedStatement.setDouble(5, balance);
-            preparedStatement.setString(6, analysedName);
-            preparedStatement.setString(7, category.name());
-            preparedStatement.setString(7, user.getEmail());
-            preparedStatement.addBatch();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("id", id);
