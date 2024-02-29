@@ -7,8 +7,6 @@
                         defaultPattern="%highlightError{[%d{HH:mm:ss} %level]: [%logger] %minecraftFormatting{%msg}%n%xEx}">
                     <PatternMatch key="de.finanzberg.backend."
                                   pattern="%highlightError{[%d{HH:mm:ss} %level]: %minecraftFormatting{%msg}%n%xEx}"/>
-                    <PatternMatch key="dev.booky.sus."
-                                  pattern="%highlightError{[%d{HH:mm:ss} %level]: [SUS] %minecraftFormatting{%msg}%n%xEx}"/>
                 </LoggerNamePatternSelector>
             </PatternLayout>
         </TerminalConsole>

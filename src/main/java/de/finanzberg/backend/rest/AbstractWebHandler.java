@@ -22,13 +22,15 @@ public abstract class AbstractWebHandler implements HttpHandler {
 
     private static boolean checkCors(HttpExchange exchange, Finanzberg finanzberg) {
         exchange.getResponseHeaders().add("Access-Control-Allow-Origin", finanzberg.getConfig().web.origin);
-        exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "*");
-        exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "*");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        String headers = exchange.getRequestHeaders().getFirst("Access-Control-Request-Headers");
+        if (headers != null) {
+            exchange.getResponseHeaders().add("Access-Control-Allow-Headers", headers);
+        }
         exchange.getResponseHeaders().add("Access-Control-Allow-Credentials", "true");
         exchange.getResponseHeaders().add("Access-Control-Max-Age", "86400");
         try {
             if (exchange.getRequestMethod().equals("OPTIONS")) {
-
                 exchange.sendResponseHeaders(204, -1);
                 exchange.close();
                 return true;

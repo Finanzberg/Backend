@@ -32,7 +32,7 @@ public class User {
         String password = CipherUtils.byteToString(CipherUtils.encryptAES(this.password, finanzberg.getConfig().key), true);
         String avatar = CipherUtils.byteToString(CipherUtils.encryptAES(this.avatar, finanzberg.getConfig().key), true);
         try {
-            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO useraccount (email, name, password, avatar) VALUES (?,?,?,?) " +
+            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO userAccount (email, name, password, avatar) VALUES (?,?,?,?) " +
                     "ON DUPLICATE KEY UPDATE name=?, password=?, avatar=?");
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, name);

@@ -19,11 +19,11 @@ public class DBManager {
         this.finanzberg = finanzberg;
         FinanzbergConfig.MySql mysql = finanzberg.getConfig().mysql;
 
-
         //Aufbau einer Connection zur Datenbank
         initConnection(mysql.host, mysql.port, mysql.database, mysql.username, mysql.password);
         //Kreieren der DB wen nicht vorhanden
         try {
+            LOGGER.info("Creating default tables...");
             connection.prepareStatement("CREATE TABLE IF NOT EXISTS userAccount (" +
                     "email VARCHAR(50) NOT NULL PRIMARY KEY," +
                     "name VARCHAR(50) NOT NULL," +
@@ -57,7 +57,7 @@ public class DBManager {
                     "ON DELETE CASCADE " +
                     ");").executeUpdate();
         } catch (SQLException exception) {
-            LOGGER.error("Error while creating tables", exception);
+            throw new RuntimeException("Error while creating default tables", exception);
         }
     }
 
@@ -79,9 +79,10 @@ public class DBManager {
         String dbUrl = "jdbc:mariadb://" + host + ":" + port + "/" + schema;
         try {
             // mit MySQL verbinden
+            LOGGER.info("Connecting to database...");
             connection = DriverManager.getConnection(dbUrl, user, pwd);
-        } catch (SQLException exception) {
-            LOGGER.error("Error while connecting to database", exception);
+        } catch (Throwable exception) {
+            throw new RuntimeException("Error while connecting to database", exception);
         }
     }
 }
