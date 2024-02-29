@@ -59,7 +59,7 @@ public class DBManager {
                         "name VARCHAR(300) NOT NULL," +
                         "monthlyBalance INT," +
                         "balance DOUBLE(30,2)," +
-                        "startDate DATE NOT NULL," +
+                        " ch DATE NOT NULL," +
                         "userAccount_email VARCHAR(50)," +
                         "FOREIGN KEY (userAccount_email) REFERENCES userAccount(email)" +
                         "ON DELETE CASCADE " +

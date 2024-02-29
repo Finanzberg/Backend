@@ -17,7 +17,6 @@ public class User {
     private String name;
     private String password;
     private String avatar;
-    private List<BankStatement> bankStatements = new ArrayList<>();
 
     public User(String email, String name, String password, String avatar, Finanzberg finanzberg) {
         this.email = email;
