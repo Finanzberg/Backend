@@ -6,6 +6,7 @@ import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.db.User;
 import de.finanzberg.backend.util.CipherUtils;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,7 +28,9 @@ public class UserLogic {
     public User login(String email, String password) {
         System.out.println("mail: " + email + "   password: " + password);
         String encryptedPassword = CipherUtils.byteToString(CipherUtils.encryptAES(password, finanzberg.getConfig().key), true);
-        try(PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("SELECT * FROM userAccount WHERE email = ? AND password = ?")) {
+        try (Connection connection = finanzberg.getDBManager().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM userAccount WHERE email = ? AND password = ?")
+        ) {
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, encryptedPassword);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -50,7 +53,9 @@ public class UserLogic {
     }
 
     public boolean createUser(String email, String name, String password, String avatar) {
-        try (PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO userAccount (email, name, password,avatar) VALUES (?, ?, ?,?)")) {
+        try (Connection connection = finanzberg.getDBManager().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO userAccount (email, name, password,avatar) VALUES (?, ?, ?,?)")
+        ) {
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, name);
             preparedStatement.setString(3, CipherUtils.byteToString(CipherUtils.encryptAES(password, finanzberg.getConfig().key), true));
@@ -63,7 +68,9 @@ public class UserLogic {
     }
 
     public boolean deleteUser(String email, String password) {
-        try(PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("DELETE FROM userAccount WHERE email = ? AND password = ?")) {
+        try (Connection connection = finanzberg.getDBManager().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM userAccount WHERE email = ? AND password = ?")
+        ) {
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, CipherUtils.byteToString(CipherUtils.encryptAES(password, finanzberg.getConfig().key), true));
             return preparedStatement.executeUpdate() > 0;
@@ -73,7 +80,9 @@ public class UserLogic {
     }
 
     public boolean changeUser(String name, String password, String avatar) {
-        try (PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("UPDATE userAccount SET name = ?, password = ?, avatar = ? WHERE email = ?")) {
+        try (Connection connection = finanzberg.getDBManager().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE userAccount SET name = ?, password = ?, avatar = ? WHERE email = ?")
+        ) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, CipherUtils.byteToString(CipherUtils.encryptAES(password, finanzberg.getConfig().key), true));
             preparedStatement.setString(3, CipherUtils.byteToString(CipherUtils.encryptAES(avatar, finanzberg.getConfig().key), true));

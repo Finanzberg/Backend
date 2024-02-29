@@ -2,6 +2,8 @@ package de.finanzberg.backend.db;
 
 import com.google.gson.JsonObject;
 import de.finanzberg.backend.Finanzberg;
+
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.time.Instant;
@@ -35,15 +37,16 @@ public class BankStatement {
         this.category = category;
     }
 
-    public static void save(User user, Finanzberg finanzberg, Collection<BankStatement> statements){
-        if (statements.isEmpty()){
+    public static void save(User user, Finanzberg finanzberg, Collection<BankStatement> statements) {
+        if (statements.isEmpty()) {
             return;
         }
-        try {
-            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO bankStatement (bankInternalId,bankname,date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?,?,?) " +
-                    "ON DUPLICATE KEY UPDATE name=name");
+        try (Connection connection = finanzberg.getDBManager().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO bankStatement (bankInternalId,bankname,date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?,?,?) " +
+                     "ON DUPLICATE KEY UPDATE name=name");
+        ) {
             for (BankStatement statement : statements) {
-                statement.save(user,preparedStatement);
+                statement.save(user, preparedStatement);
             }
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -52,9 +55,11 @@ public class BankStatement {
     }
 
     public void save(User user, PreparedStatement preparedStatementUser) {
-        try {
-            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO bankStatement (bankInternalId,bankname,date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?,?,?) " +
+        try (Connection connection = finanzberg.getDBManager().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO bankStatement (bankInternalId,bankname,date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?,?,?) " +
                     "ON DUPLICATE KEY UPDATE name=name");
+        ) {
+
 
             preparedStatement.setInt(1, bankInternalId);
             preparedStatement.setString(2, bankName);
@@ -73,19 +78,18 @@ public class BankStatement {
     }
 
 
-
     public JsonObject toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("id", id);
-        json.addProperty("bankInternalId",bankInternalId);
-        json.addProperty("bankName",bankName);
+        json.addProperty("bankInternalId", bankInternalId);
+        json.addProperty("bankName", bankName);
         json.addProperty("date", date.toEpochMilli());
         json.addProperty("description", description);
-        json.addProperty("withdrawal",withdrawal);
-        json.addProperty("deposit",deposit);
-        json.addProperty("balance",balance);
-        json.addProperty("analysedName",analysedName);
-        json.addProperty("category",category.name());
+        json.addProperty("withdrawal", withdrawal);
+        json.addProperty("deposit", deposit);
+        json.addProperty("balance", balance);
+        json.addProperty("analysedName", analysedName);
+        json.addProperty("category", category.name());
         return json;
     }
 

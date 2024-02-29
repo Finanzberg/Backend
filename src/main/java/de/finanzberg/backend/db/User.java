@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.util.CipherUtils;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class User {
     private String name;
     private String password;
     private String avatar;
-    private List<BankStatement> bankStatements =new ArrayList<>();
+    private List<BankStatement> bankStatements = new ArrayList<>();
 
     public User(String email, String name, String password, String avatar, Finanzberg finanzberg) {
         this.email = email;
@@ -31,9 +32,10 @@ public class User {
     public void save() {
         String password = CipherUtils.byteToString(CipherUtils.encryptAES(this.password, finanzberg.getConfig().key), true);
         String avatar = CipherUtils.byteToString(CipherUtils.encryptAES(this.avatar, finanzberg.getConfig().key), true);
-        try {
-            PreparedStatement preparedStatement = finanzberg.getDBManager().getConnection().prepareStatement("INSERT INTO userAccount (email, name, password, avatar) VALUES (?,?,?,?) " +
-                    "ON DUPLICATE KEY UPDATE name=?, password=?, avatar=?");
+        try (Connection connection = finanzberg.getDBManager().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO userAccount (email, name, password, avatar) VALUES (?,?,?,?) " +
+                     "ON DUPLICATE KEY UPDATE name=?, password=?, avatar=?");
+        ) {
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, name);
             preparedStatement.setString(3, password);
@@ -45,7 +47,7 @@ public class User {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        BankStatement.save(this,finanzberg,bankStatements);
+        BankStatement.save(this, finanzberg, bankStatements);
     }
 
     public String getEmail() {
