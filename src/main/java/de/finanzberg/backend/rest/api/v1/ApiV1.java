@@ -7,6 +7,7 @@ import de.finanzberg.backend.rest.api.v1.account.AccountChange;
 import de.finanzberg.backend.rest.api.v1.account.AccountCreate;
 import de.finanzberg.backend.rest.api.v1.account.AccountDelete;
 import de.finanzberg.backend.rest.api.v1.account.AccountSession;
+import de.finanzberg.backend.rest.api.v1.data.SelectBudgets;
 import de.finanzberg.backend.rest.api.v1.data.SelectStatements;
 
 public class ApiV1 {
@@ -22,7 +23,7 @@ public class ApiV1 {
         server.createContext(parent + PATH + "account/session", new AccountSession(finanzberg));
 
         // Data
+        server.createContext(parent + PATH + "data/budgets", new SelectBudgets(finanzberg));
         server.createContext(parent + PATH + "data/statements", new SelectStatements(finanzberg));
-
     }
 }
