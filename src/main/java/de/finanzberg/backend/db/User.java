@@ -46,7 +46,6 @@ public class User {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        BankStatement.save(this, finanzberg);
     }
 
     public String getEmail() {
