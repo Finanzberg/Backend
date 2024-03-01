@@ -29,9 +29,8 @@ public class BankStatement {
     private BankStatementCategory category;
 
 
-    public BankStatement(Finanzberg finanzberg, int id, int bankInternalId, String bankName, Instant date, String description, double withdrawal, double deposit, double balance, String analysedName, BankStatementCategory category) {
+    public BankStatement(Finanzberg finanzberg, int bankInternalId, String bankName, Instant date, String description, double withdrawal, double deposit, double balance, String analysedName, BankStatementCategory category) {
         this.finanzberg = finanzberg;
-        this.id = id;
         this.bankInternalId = bankInternalId;
         this.bankName = bankName;
         this.date = date;
@@ -43,11 +42,14 @@ public class BankStatement {
         this.category = category;
     }
 
-    public static void save(User user, Finanzberg finanzberg) {
+    public static void save(User user, Finanzberg finanzberg, Collection<BankStatement> bankStatements) {
         try (Connection connection = finanzberg.getDBManager().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO bankStatement (bankInternalId,bankname,date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?,?,?) " +
                      "ON DUPLICATE KEY UPDATE name=name");
         ) {
+            for (BankStatement bankStatement : bankStatements) {
+                bankStatement.save(user, preparedStatement);
+            }
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
             LOGGER.error("Error while saving bank statements", exception);

@@ -10,7 +10,7 @@ public class ParserRegistry {
     private final Map<String, AbstractParser> parsers = new HashMap<>();
 
     public ParserRegistry(Finanzberg finanzberg) {
-
+        parsers.put("CSV.ApoBank", new CSVApoBank(finanzberg));
     }
 
     public AbstractParser get(String type) {

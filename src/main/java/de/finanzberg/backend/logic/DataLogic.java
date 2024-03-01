@@ -34,7 +34,6 @@ public class DataLogic {
             while (resultSet.next()) {
                 statements.add(new BankStatement(
                         finanzberg,
-                        resultSet.getInt("id"),
                         resultSet.getInt("bankInternalId"),
                         resultSet.getString("bankname"),
                         resultSet.getDate("date").toInstant(),
