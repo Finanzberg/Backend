@@ -7,6 +7,7 @@ import de.finanzberg.backend.config.FinanzbergConfig;
 import de.finanzberg.backend.db.DBManager;
 import de.finanzberg.backend.logic.DataLogic;
 import de.finanzberg.backend.logic.UserLogic;
+import de.finanzberg.backend.logic.parser.ParserRegistry;
 import de.finanzberg.backend.rest.WebServer;
 import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ public class Finanzberg {
     private static final Path CONFIG_PATH = Path.of("config.yml");
     private FinanzbergConfig config;
     private DBManager dbManager;
+    private ParserRegistry parsers;
     private UserLogic userLogic;
     private DataLogic dataLogic;
     private boolean running = true;
@@ -33,6 +35,9 @@ public class Finanzberg {
 
             LOGGER.info("Loading DBManager...");
             dbManager = new DBManager(this);
+
+            LOGGER.info("Loading Parsers");
+            parsers = new ParserRegistry(this);
 
             LOGGER.info("Loading UserLogic...");
             userLogic = new UserLogic(this);
@@ -73,6 +78,10 @@ public class Finanzberg {
 
     public DBManager getDBManager() {
         return dbManager;
+    }
+
+    public ParserRegistry getParsers() {
+        return parsers;
     }
 
     public UserLogic getUserLogic() {
