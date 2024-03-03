@@ -25,7 +25,6 @@ public enum BankStatementCategory {
         if (description.contains("Entgelt")) return BankStatementCategory.SALARY;
         if (description.contains("Einkommen")) return BankStatementCategory.SALARY;
         if (description.contains("Aufwandsenschädigung")) return BankStatementCategory.SALARY;
-        if (description.contains("Einkommen")) return BankStatementCategory.SALARY;
         if (description.contains("Besoldung")) return BankStatementCategory.SALARY;
         if (description.contains("Bezug")) return BankStatementCategory.SALARY;
         if (description.contains("Bezüge")) return BankStatementCategory.SALARY;
@@ -72,7 +71,6 @@ public enum BankStatementCategory {
         if (description.contains("SHEIN")) return BankStatementCategory.SHOPPING;
         if (description.contains("Primark")) return BankStatementCategory.SHOPPING;
         if (description.contains("Peek")) return BankStatementCategory.SHOPPING;
-        if (description.contains("")) return BankStatementCategory.SHOPPING;
 
 
         if (description.contains("Apotheke")) return BankStatementCategory.HEALTH;
@@ -82,7 +80,6 @@ public enum BankStatementCategory {
 
         if (description.contains("Miete")) return BankStatementCategory.RENT;
         if (description.contains("Bestand")) return BankStatementCategory.RENT;
-        if (description.contains("Miete")) return BankStatementCategory.RENT;
 
         if (description.contains("Versicherung")) return BankStatementCategory.INSURANCE;
         if (description.contains("Rente")) return BankStatementCategory.INSURANCE;
