@@ -81,13 +81,14 @@ public class UserLogic {
         }
     }
 
-    public boolean changeUser(String name, String password, String avatar) {
+    public boolean changeUser(String name, String password, String avatar, User user) {
         try (Connection connection = finanzberg.getDBManager().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("UPDATE userAccount SET name = ?, password = ?, avatar = ? WHERE email = ?")
         ) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, CipherUtils.byteToString(CipherUtils.encryptAES(password, finanzberg.getConfig().key), true));
             preparedStatement.setString(3, CipherUtils.byteToString(CipherUtils.encryptAES(avatar, finanzberg.getConfig().key), true));
+            preparedStatement.setString(4, user.getEmail());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException exception) {
             throw new RuntimeException(exception);

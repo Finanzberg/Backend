@@ -38,11 +38,14 @@ public class AccountChange extends AuthedWebHandler {
             exchange.sendResponseHeaders(400, -1);
             return;
         }
-        boolean changed = this.finanzberg.getUserLogic().changeUser(name, password, avatar);
+        boolean changed = this.finanzberg.getUserLogic().changeUser(name, password, avatar, user);
         if (!changed) {
             exchange.sendResponseHeaders(400, -1);
             return;
         }
+        user.setName(name);
+        user.setPassword(password);
+        user.setAvatar(avatar);
         exchange.sendResponseHeaders(200, 0);
     }
 }
