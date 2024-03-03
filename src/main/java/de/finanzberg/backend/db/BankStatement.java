@@ -28,7 +28,6 @@ public class BankStatement {
     private String analysedName;
     private BankStatementCategory category;
 
-
     public BankStatement(Finanzberg finanzberg, int bankInternalId, String bankName, Instant date, String description, double withdrawal, double deposit, double balance, String analysedName, BankStatementCategory category) {
         this.finanzberg = finanzberg;
         this.bankInternalId = bankInternalId;

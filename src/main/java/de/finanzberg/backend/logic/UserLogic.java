@@ -10,23 +10,25 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class UserLogic {
+
+    public final Duration SESSION_MAX_AGE;
 
     private final Finanzberg finanzberg;
     private final Cache<UUID, User> activeUsers;
 
     public UserLogic(Finanzberg finanzberg) {
         this.finanzberg = finanzberg;
+        this.SESSION_MAX_AGE = Duration.ofMinutes(finanzberg.getConfig().web.sessionMaxAgeMinutes);
         this.activeUsers = Caffeine.newBuilder()
-                .expireAfterAccess(finanzberg.getConfig().web.sessionMaxAgeMinutes, TimeUnit.MINUTES)
+                .expireAfterAccess(SESSION_MAX_AGE)
                 .build();
     }
 
     public User login(String email, String password) {
-        System.out.println("mail: " + email + "   password: " + password);
         String encryptedPassword = CipherUtils.byteToString(CipherUtils.encryptAES(password, finanzberg.getConfig().key), true);
         try (Connection connection = finanzberg.getDBManager().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM userAccount WHERE email = ? AND password = ?")
@@ -54,7 +56,7 @@ public class UserLogic {
 
     public boolean createUser(String email, String name, String password, String avatar) {
         try (Connection connection = finanzberg.getDBManager().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO userAccount (email, name, password,avatar) VALUES (?, ?, ?,?)")
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO userAccount (email, name, password,avatar) VALUES (?, ?, ?, ?)")
         ) {
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, name);

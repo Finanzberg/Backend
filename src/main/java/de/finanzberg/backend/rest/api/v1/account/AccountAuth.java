@@ -1,13 +1,12 @@
 package de.finanzberg.backend.rest.api.v1.account;
 
 import com.google.gson.JsonObject;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.db.User;
 import de.finanzberg.backend.rest.AbstractWebHandler;
 import de.finanzberg.backend.util.StreamUtils;
-
-import java.util.UUID;
 
 public class AccountAuth extends AbstractWebHandler {
 
@@ -34,9 +33,11 @@ public class AccountAuth extends AbstractWebHandler {
             exchange.sendResponseHeaders(401, -1);
             return;
         }
-        UUID session = user.getSession();
+
+        Headers headers = exchange.getResponseHeaders();
+        headers.add("Set-Cookie", "session=" + user.getSession().toString() + "; Path=/; SameSite=None; Secure");
+
         JsonObject response = new JsonObject();
-        response.addProperty("session", session.toString());
         response.add("user", user.toJson(false));
 
         exchange.sendResponseHeaders(200, 0);

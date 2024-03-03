@@ -1,6 +1,7 @@
 package de.finanzberg.backend.rest.api.v1.account;
 
 import com.google.gson.JsonObject;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.db.User;
@@ -42,9 +43,11 @@ public class AccountCreate extends AbstractWebHandler {
             exchange.sendResponseHeaders(500, -1); // this should never happen
             return;
         }
+        Headers headers = exchange.getResponseHeaders();
+        headers.add("Set-Cookie", "session=" + user.getSession().toString() + "; Path=/; SameSite=None; Secure");
 
         JsonObject response = new JsonObject();
-        response.addProperty("session", user.getSession().toString());
+
         response.add("user", user.toJson(false));
 
         exchange.sendResponseHeaders(201, 0);

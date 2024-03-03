@@ -15,16 +15,14 @@ public class AccountDelete extends AuthedWebHandler {
     @Override
     public void handleAuthedRequest(HttpExchange exchange, User user) throws Throwable {
         JsonObject request = this.getRequestBody(exchange);
-        String email;
         String password;
         try {
-            email = request.get("email").getAsString();
             password = request.get("password").getAsString();
         } catch (Exception ignored) {
             exchange.sendResponseHeaders(400, -1);
             return;
         }
-        boolean deleted = this.finanzberg.getUserLogic().deleteUser(email, password);
+        boolean deleted = this.finanzberg.getUserLogic().deleteUser(user.getEmail(), password);
         if (!deleted) {
             exchange.sendResponseHeaders(400, -1);
             return;
