@@ -68,7 +68,7 @@ public class User {
         return session;
     }
 
-    public JsonObject toJson() {
+    public JsonObject toJson(boolean withAvatar) {
         JsonObject json = new JsonObject();
         json.addProperty("email", email);
         json.addProperty("name", name);

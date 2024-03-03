@@ -45,7 +45,7 @@ public class AccountCreate extends AbstractWebHandler {
 
         JsonObject response = new JsonObject();
         response.addProperty("session", user.getSession().toString());
-        response.add("user", user.toJson());
+        response.add("user", user.toJson(false));
 
         exchange.sendResponseHeaders(201, 0);
         StreamUtils.writeJsonFully(response, exchange.getResponseBody());
