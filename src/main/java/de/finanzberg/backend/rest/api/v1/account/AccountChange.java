@@ -46,6 +46,10 @@ public class AccountChange extends AuthedWebHandler {
         user.setName(name);
         user.setPassword(password);
         user.setAvatar(avatar);
+
+        JsonObject response = new JsonObject();
+        response.add("user", user.toJson(false));
+
         exchange.sendResponseHeaders(200, 0);
     }
 }
