@@ -6,8 +6,6 @@ import de.finanzberg.backend.util.CipherUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class User {
@@ -72,7 +70,9 @@ public class User {
         JsonObject json = new JsonObject();
         json.addProperty("email", email);
         json.addProperty("name", name);
-        json.addProperty("avatar", avatar);
+        if (withAvatar) {
+            json.addProperty("avatar", avatar);
+        }
         return json;
     }
 
