@@ -3,6 +3,7 @@ package de.finanzberg.backend.logic.parser;
 import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.db.BankStatement;
 import de.finanzberg.backend.db.BankStatementCategory;
+import de.finanzberg.backend.db.BankStatementName;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -23,38 +24,38 @@ public class CSVSparkasse extends AbstractParser{
     @Override
     public List<BankStatement> parseStatements(String csv) {
         List<BankStatement> bankStatements = new ArrayList<>();
-        /*
-        // TODO: 3 Mar 2024 add csv value places
         List<String> csvLine = new ArrayList<>(List.of(csv.split("\n")));
         csvLine.remove(1);
         for (String line : csvLine) {
             String[] values = line.split(";");
+            for (String value : values) {
+                value = value.substring(1, value.length() - 1);
+            }
             double withdrawal = 0;
             double deposit = 0;
-            if (values[x].startsWith("-")){
-                withdrawal = Double.parseDouble(values[x]);
+            if (values[9].startsWith("-")){
+                withdrawal = Double.parseDouble(values[9]);
             }else{
-                deposit = Double.parseDouble(values[x]);
+                deposit = Double.parseDouble(values[9]);
             }
             try {
                 bankStatements.add(new BankStatement(
                         finanzberg,
-                        Integer.parseInt(values[x]),
+                        -1,
                         bankName,
-                        DATE_FORMAT.parse(values[x]).toInstant(),
-                        values[x],
+                        DATE_FORMAT.parse(values[3]).toInstant(),
+                        values[4],
                         withdrawal,
                         deposit,
-                        Double.parseDouble(values[x]),
-                         BankStatementName.analyseName(values[x]).toString(),
-                        BankStatementCategory.analyseCategory(values[x])
+                        Double.parseDouble(values[4]),
+                        BankStatementName.analyseName(values[4]).toString(),
+                        BankStatementCategory.analyseCategory(values[4])
                 ));
             } catch (ParseException exception) {
                 throw new RuntimeException(exception);
             }
 
         }
-        */
         return bankStatements;
     }
 

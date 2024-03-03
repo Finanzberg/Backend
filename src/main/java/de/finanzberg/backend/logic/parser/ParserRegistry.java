@@ -11,6 +11,7 @@ public class ParserRegistry {
 
     public ParserRegistry(Finanzberg finanzberg) {
         parsers.put("CSV.ApoBank", new CSVApoBank(finanzberg));
+        parsers.put("CSV.Sparkasse", new CSVSparkasse(finanzberg));
     }
 
     public AbstractParser get(String type) {
