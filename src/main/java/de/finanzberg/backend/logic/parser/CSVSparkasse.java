@@ -36,9 +36,6 @@ public class CSVSparkasse extends AbstractParser{
             }else{
                 deposit = Double.parseDouble(values[x]);
             }
-            // TODO: 3 Mar 2024 make analysedName
-            String analysedName = "";
-
             try {
                 bankStatements.add(new BankStatement(
                         finanzberg,
@@ -49,7 +46,7 @@ public class CSVSparkasse extends AbstractParser{
                         withdrawal,
                         deposit,
                         Double.parseDouble(values[x]),
-                        analysedName,
+                         BankStatementName.analyseName(values[x]).toString(),
                         BankStatementCategory.analyseCategory(values[x])
                 ));
             } catch (ParseException exception) {

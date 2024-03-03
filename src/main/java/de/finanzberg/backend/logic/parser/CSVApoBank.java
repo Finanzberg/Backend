@@ -3,8 +3,8 @@ package de.finanzberg.backend.logic.parser;
 import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.db.BankStatement;
 import de.finanzberg.backend.db.BankStatementCategory;
+import de.finanzberg.backend.db.BankStatementName;
 
-import javax.swing.text.DateFormatter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,8 +34,6 @@ public class CSVApoBank extends AbstractParser{
             }else{
                 deposit = Double.parseDouble(values[5]);
             }
-            // TODO: 3 Mar 2024 make analysedName
-            String analysedName = "";
 
             try {
                 bankStatements.add(new BankStatement(
@@ -47,7 +45,7 @@ public class CSVApoBank extends AbstractParser{
                         withdrawal,
                         deposit,
                         Double.parseDouble(values[6]),
-                        analysedName,
+                        BankStatementName.analyseName(values[4]).toString(),
                         BankStatementCategory.analyseCategory(values[4])
                         ));
             } catch (ParseException exception) {
