@@ -19,9 +19,21 @@ public class AccountChange extends AuthedWebHandler {
         String password;
         String avatar;
         try {
-            name = request.get("name").getAsString();
-            password = request.get("password").getAsString();
-            avatar = request.get("avatar").getAsString();
+            if (request.has("name")) {
+                name = request.get("name").getAsString();
+            } else {
+                name = user.getName();
+            }
+            if (request.has("password")) {
+                password = request.get("password").getAsString();
+            } else {
+                password = user.getPassword();
+            }
+            if (request.has("avatar")) {
+                avatar = request.get("avatar").getAsString();
+            } else {
+                avatar = user.getAvatar();
+            }
         } catch (Exception ignored) {
             exchange.sendResponseHeaders(400, -1);
             return;
