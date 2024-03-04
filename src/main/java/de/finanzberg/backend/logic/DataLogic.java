@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class DataLogic {
@@ -54,6 +55,7 @@ public class DataLogic {
 
     public JsonArray loadStatementsJson(User user) {
         List<BankStatement> statements = loadStatements(user);
+        statements.sort(Comparator.comparing(BankStatement::getDate));
         JsonArray array = new JsonArray(statements.size());
         for (BankStatement statement : statements) {
             array.add(statement.toJson());

@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public class Saldo extends AuthedWebHandler {
             return;
         }
 
-        statements.sort(Comparator.comparingLong(o -> o.getDate().toEpochMilli()));
+        statements.sort(Comparator.comparing(BankStatement::getDate));
         JsonObject response = new JsonObject();
 
         Instant start = statements.get(0).getDate();
@@ -40,18 +41,17 @@ public class Saldo extends AuthedWebHandler {
 
         int days = (int) ((end.getEpochSecond() - start.getEpochSecond()) / 86400);
 
-        Map<Long, Double> map = new HashMap<>(days);
-        Map<Long, Double> results = new HashMap<>();
+        Map<Long, Double> map = new LinkedHashMap<>(days);
+        Map<Long, Double> results = new LinkedHashMap<>();
 
         for (BankStatement statement : statements) {
             long date = statement.getDate().getEpochSecond();
-            Double previous = map.getOrDefault(date, statement.getBalance());
-
-            map.put(date, (previous + statement.getBalance()) / 2d);
+            double previous = map.getOrDefault(date, statement.getBalance());
+            map.put(date, Math.max(previous, statement.getBalance()));
         }
 
         double value = 0d;
-        for (int i = 0; i < days; i++) {
+        for (int i = 0; i <= days; i++) {
             long epochSecond = start.plusSeconds(i * 86400L).getEpochSecond();
             value = map.getOrDefault(epochSecond, value);
             results.put(epochSecond, value);

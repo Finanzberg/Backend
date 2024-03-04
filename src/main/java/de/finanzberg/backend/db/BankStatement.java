@@ -17,16 +17,16 @@ public class BankStatement {
     private static final Logger LOGGER = LoggerFactory.getLogger("BankStatement");
 
     private final Finanzberg finanzberg;
-    private int id;
     private final int bankInternalId;
     private final String bankName;
     private final Instant date;
     private final String description;
     private final double withdrawal;
     private final double deposit;
-    private final double balance;
     private final String analysedName;
     private final BankStatementCategory category;
+    private int id;
+    private double balance;
 
     public BankStatement(Finanzberg finanzberg, int bankInternalId, String bankName, Instant date, String description, double withdrawal, double deposit, double balance, String analysedName, BankStatementCategory category) {
         this.finanzberg = finanzberg;
@@ -119,6 +119,10 @@ public class BankStatement {
 
     public double getBalance() {
         return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public String getAnalysedName() {
