@@ -9,10 +9,12 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -88,5 +90,10 @@ public class CipherUtils {
         }
 
         return decompressed;
+    }
+
+    public static String decode64(String base64) {
+        byte[] decoded = B64_DECODER.decode(base64.toUpperCase(Locale.ROOT));
+        return new String(decoded);
     }
 }

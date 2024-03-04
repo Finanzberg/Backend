@@ -117,14 +117,6 @@ public enum BankStatementName {
         if (description.contains("Spotify")) return BankStatementName.SUBSCRIPTIONS;
         if (description.contains("Duolingo")) return BankStatementName.SUBSCRIPTIONS;
 
-        if (description.contains("PayPal (Europe) S.a.r.l. et. Cie, S.C.A.")) return BankStatementName.OTHER;
-        if (description.contains("Sparkasse")) return BankStatementName.OTHER;
-        if (description.contains("Bank")) return BankStatementName.OTHER;
-
-
-
-
-
-        return null;
+        return BankStatementName.OTHER;
     }
 }

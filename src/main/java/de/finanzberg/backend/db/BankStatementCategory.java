@@ -94,18 +94,6 @@ public enum BankStatementCategory {
         if (description.contains("Spotify")) return BankStatementCategory.SUBSCRIPTIONS;
         if (description.contains("Duolingo")) return BankStatementCategory.SUBSCRIPTIONS;
 
-        if (description.contains("PayPal (Europe) S.a.r.l. et. Cie, S.C.A.")) return BankStatementCategory.OTHER;
-        if (description.contains("Sparkasse")) return BankStatementCategory.OTHER;
-        if (description.contains("Bank")) return BankStatementCategory.OTHER;
-
-
-
-
-
-        return null;
+        return BankStatementCategory.OTHER;
     }
-
-
-
-    
 }

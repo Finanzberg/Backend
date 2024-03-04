@@ -12,6 +12,10 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +40,7 @@ public class DataLogic {
                         finanzberg,
                         resultSet.getInt("bankInternalId"),
                         resultSet.getString("bankname"),
-                        resultSet.getDate("date").toInstant(),
+                        resultSet.getDate("date").toLocalDate().atStartOfDay().toInstant(ZoneOffset.UTC),
                         resultSet.getString("description"),
                         resultSet.getDouble("withdrawal"),
                         resultSet.getDouble("deposit"),
@@ -74,7 +78,7 @@ public class DataLogic {
                         resultSet.getString("name"),
                         resultSet.getInt("percentage"),
                         resultSet.getDouble("balance"),
-                        resultSet.getDate("ch").toInstant()
+                        resultSet.getDate("ch").toLocalDate().atStartOfDay().toInstant(ZoneOffset.UTC)
                 ));
             }
         } catch (Exception exception) {

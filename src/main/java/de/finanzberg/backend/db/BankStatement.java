@@ -44,12 +44,12 @@ public class BankStatement {
     public static void save(User user, Finanzberg finanzberg, Collection<BankStatement> bankStatements) {
         try (Connection connection = finanzberg.getDBManager().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO bankStatement (bankInternalId,bankname,date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?,?,?) " +
-                     "ON DUPLICATE KEY UPDATE name=name");
+                     "ON DUPLICATE KEY UPDATE userAccount_email=userAccount_email");
         ) {
             for (BankStatement bankStatement : bankStatements) {
                 bankStatement.save(user, preparedStatement);
             }
-            preparedStatement.executeUpdate();
+            preparedStatement.executeBatch();
         } catch (Exception exception) {
             LOGGER.error("Error while saving bank statements", exception);
         }
@@ -83,6 +83,50 @@ public class BankStatement {
         json.addProperty("analysedName", analysedName);
         json.addProperty("category", category.name());
         return json;
+    }
+
+    public Finanzberg getFinanzberg() {
+        return finanzberg;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getBankInternalId() {
+        return bankInternalId;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public Instant getDate() {
+        return date;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public double getWithdrawal() {
+        return withdrawal;
+    }
+
+    public double getDeposit() {
+        return deposit;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public String getAnalysedName() {
+        return analysedName;
+    }
+
+    public BankStatementCategory getCategory() {
+        return category;
     }
 
     @Override

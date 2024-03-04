@@ -25,31 +25,32 @@ public class CSVSparkasse extends AbstractParser{
     public List<BankStatement> parseStatements(String csv) {
         List<BankStatement> bankStatements = new ArrayList<>();
         List<String> csvLine = new ArrayList<>(List.of(csv.split("\n")));
-        csvLine.remove(1);
+        csvLine.remove(0);
         for (String line : csvLine) {
             String[] values = line.split(";");
-            for (String value : values) {
-                value = value.substring(1, value.length() - 1);
+            for (int i = 0; i < values.length; i++) {
+                values[i] = values[i].substring(1, values[i].length() - 1);
             }
             double withdrawal = 0;
             double deposit = 0;
-            if (values[9].startsWith("-")){
-                withdrawal = Double.parseDouble(values[9]);
+            values[8] = values[8].replace(",", ".");
+            if (values[8].startsWith("-")){
+                withdrawal = Double.parseDouble(values[8]);
             }else{
-                deposit = Double.parseDouble(values[9]);
+                deposit = Double.parseDouble(values[8]);
             }
             try {
                 bankStatements.add(new BankStatement(
                         finanzberg,
                         -1,
                         bankName,
-                        DATE_FORMAT.parse(values[3]).toInstant(),
-                        values[4],
+                        DATE_FORMAT.parse(values[2]).toInstant(),
+                        values[3],
                         withdrawal,
                         deposit,
-                        Double.parseDouble(values[4]),
-                        BankStatementName.analyseName(values[4]).toString(),
-                        BankStatementCategory.analyseCategory(values[4])
+                        0,
+                        BankStatementName.analyseName(values[3]).toString(),
+                        BankStatementCategory.analyseCategory(values[3])
                 ));
             } catch (ParseException exception) {
                 throw new RuntimeException(exception);

@@ -39,18 +39,17 @@ public class DBManager {
                         "avatar MEDIUMTEXT NOT NULL" +
                         ");").executeUpdate();
                 connection.prepareStatement("CREATE TABLE IF NOT EXISTS bankStatement (" +
-                        "id INT AUTO_INCREMENT," +
                         "bankInternalId INT," +
                         "bankname VARCHAR(50)," +
                         "date DATE NOT NULL," +
-                        "description VARCHAR(300)," +
+                        "description MEDIUMTEXT," +
                         "withdrawal DOUBLE(30,2)," +
                         "deposit DOUBLE(30,2)," +
                         "balance DOUBLE(30,2)," +
                         "analysedName VARCHAR(50)," +
                         "category VARCHAR(50)," +
                         "userAccount_email VARCHAR(50)," +
-                        "PRIMARY KEY (id, bankInternalId, bankname)," +
+                        "PRIMARY KEY (bankInternalId, bankname, userAccount_email)," +
                         "FOREIGN KEY (userAccount_email) REFERENCES userAccount(email)" +
                         "ON DELETE CASCADE " +
                         ");").executeUpdate();
@@ -64,6 +63,7 @@ public class DBManager {
                         "FOREIGN KEY (userAccount_email) REFERENCES userAccount(email)" +
                         "ON DELETE CASCADE " +
                         ");").executeUpdate();
+               // connection.prepareStatement("CREATE TABLE IF NOT EXISTS sessions()");
             }
         } catch (SQLException exception) {
             throw new RuntimeException("Error while creating default tables", exception);
