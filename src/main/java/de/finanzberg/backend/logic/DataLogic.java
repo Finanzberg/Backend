@@ -74,7 +74,7 @@ public class DataLogic {
                 Budget budget = new Budget(
                         this.finanzberg,
                         resultSet.getString("name"),
-                        resultSet.getInt("percentage"),
+                        resultSet.getInt("monthlyBalance"),
                         resultSet.getDouble("balance"),
                         resultSet.getDate("startDate").toLocalDate().atStartOfDay().toInstant(ZoneOffset.UTC)
                 );
