@@ -12,11 +12,10 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.sql.SQLException;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DataLogic {
@@ -74,11 +73,10 @@ public class DataLogic {
             while (resultSet.next()) {
                 budgets.add(new Budget(
                         this.finanzberg,
-                        resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getInt("percentage"),
                         resultSet.getDouble("balance"),
-                        resultSet.getDate("ch").toLocalDate().atStartOfDay().toInstant(ZoneOffset.UTC)
+                        resultSet.getDate("startDate").toLocalDate().atStartOfDay().toInstant(ZoneOffset.UTC)
                 ));
             }
         } catch (Exception exception) {
