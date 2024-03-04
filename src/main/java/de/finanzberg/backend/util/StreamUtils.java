@@ -2,6 +2,7 @@ package de.finanzberg.backend.util;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sun.net.httpserver.HttpExchange;
 import de.finanzberg.backend.Finanzberg;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,6 +60,13 @@ public class StreamUtils {
 
     public static void writeJsonFully(JsonElement json, OutputStream os) {
         writeFully(Finanzberg.GSON.toJson(json), os);
+    }
+
+    public static void writeSaveJson(JsonElement json, HttpExchange exchange, int status) throws Throwable {
+        exchange.getResponseHeaders().add("Content-Type", "application/json");
+        byte[] bytes = Finanzberg.GSON.toJson(json).getBytes(StandardCharsets.UTF_8);
+        exchange.sendResponseHeaders(status, bytes.length);
+        write(bytes, exchange.getResponseBody());
     }
 
     public static byte[] compressGzip(byte[] data) {

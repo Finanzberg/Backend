@@ -27,6 +27,7 @@ public class ApiV1 {
         server.createContext(parent + PATH + "account/session", new AccountSession(finanzberg));
 
         // Data
+        server.createContext(parent + PATH + "data/budget-create", new Saldo(finanzberg));
         server.createContext(parent + PATH + "data/saldo", new Saldo(finanzberg));
         server.createContext(parent + PATH + "data/budgets", new SelectBudgets(finanzberg));
         server.createContext(parent + PATH + "data/statements", new SelectStatements(finanzberg));

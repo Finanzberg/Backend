@@ -1,5 +1,7 @@
 package de.finanzberg.backend.rest.api.v1.data;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.db.User;
@@ -16,7 +18,8 @@ public class SelectStatements extends AuthedWebHandler {
     @Override
     public void handleAuthedRequest(HttpExchange exchange, User user) throws Throwable {
         DataLogic dataLogic = finanzberg.getDataLogic();
+        JsonArray response = dataLogic.loadStatementsJson(user);
 
-        StreamUtils.writeJsonFully(dataLogic.loadStatementsJson(user), exchange.getResponseBody());
+        StreamUtils.writeSaveJson(response, exchange,200);
     }
 }
