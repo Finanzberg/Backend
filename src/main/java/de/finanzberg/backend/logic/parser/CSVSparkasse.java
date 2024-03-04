@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CSVSparkasse extends AbstractParser{
+public class CSVSparkasse extends AbstractParser {
 
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
     String bankName = "Sparkasse";
@@ -34,9 +34,9 @@ public class CSVSparkasse extends AbstractParser{
             double withdrawal = 0;
             double deposit = 0;
             values[8] = values[8].replace(",", ".");
-            if (values[8].startsWith("-")){
+            if (values[8].startsWith("-")) {
                 withdrawal = Double.parseDouble(values[8]);
-            }else{
+            } else {
                 deposit = Double.parseDouble(values[8]);
             }
             try {

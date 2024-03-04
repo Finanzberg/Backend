@@ -18,15 +18,15 @@ public class BankStatement {
 
     private final Finanzberg finanzberg;
     private int id;
-    private int bankInternalId;
-    private String bankName;
-    private Instant date;
-    private String description;
-    private double withdrawal;
-    private double deposit;
-    private double balance;
-    private String analysedName;
-    private BankStatementCategory category;
+    private final int bankInternalId;
+    private final String bankName;
+    private final Instant date;
+    private final String description;
+    private final double withdrawal;
+    private final double deposit;
+    private final double balance;
+    private final String analysedName;
+    private final BankStatementCategory category;
 
     public BankStatement(Finanzberg finanzberg, int bankInternalId, String bankName, Instant date, String description, double withdrawal, double deposit, double balance, String analysedName, BankStatementCategory category) {
         this.finanzberg = finanzberg;
@@ -44,7 +44,7 @@ public class BankStatement {
     public static void save(User user, Finanzberg finanzberg, Collection<BankStatement> bankStatements) {
         try (Connection connection = finanzberg.getDBManager().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO bankStatement (bankInternalId,bankname,date,description,withdrawal,deposit,balance,analysedName,category,userAccount_email) VALUES (?,?,?,?,?,?,?,?,?,?) " +
-                     "ON DUPLICATE KEY UPDATE userAccount_email=userAccount_email");
+                     "ON DUPLICATE KEY UPDATE userAccount_email=userAccount_email")
         ) {
             for (BankStatement bankStatement : bankStatements) {
                 bankStatement.save(user, preparedStatement);

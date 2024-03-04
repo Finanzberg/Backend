@@ -8,8 +8,6 @@ import de.finanzberg.backend.db.User;
 import de.finanzberg.backend.rest.AbstractWebHandler;
 import de.finanzberg.backend.util.StreamUtils;
 
-import java.util.stream.Stream;
-
 public class AccountCreate extends AbstractWebHandler {
 
     public AccountCreate(Finanzberg finanzberg) {

@@ -1,7 +1,6 @@
 package de.finanzberg.backend.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ShitSplit {
@@ -22,7 +21,7 @@ public class ShitSplit {
                 builder.append(c);
             }
         }
-        if (!s.isEmpty()){
+        if (!s.isEmpty()) {
             result.add(builder.toString());
         }
         return result.toArray(new String[0]);

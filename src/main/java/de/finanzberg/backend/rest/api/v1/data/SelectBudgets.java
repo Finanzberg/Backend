@@ -17,6 +17,6 @@ public class SelectBudgets extends AuthedWebHandler {
     public void handleAuthedRequest(HttpExchange exchange, User user) throws Throwable {
         DataLogic dataLogic = finanzberg.getDataLogic();
 
-        StreamUtils.writeSaveJson(dataLogic.loadBudgetsJson(user), exchange,200);
+        StreamUtils.writeSaveJson(dataLogic.loadBudgetsJson(user), exchange, 200);
     }
 }

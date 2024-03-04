@@ -24,7 +24,6 @@ public enum BankStatementName {
     Airline,
 
 
-
     SHOPPING,
     HEALTH,
     FREETIME,
@@ -39,7 +38,7 @@ public enum BankStatementName {
     UNEMPLOYMENT_BENEFIT,
     CHILD_BENEFIT;
 
-    public static BankStatementName analyseName(String description){
+    public static BankStatementName analyseName(String description) {
         //// TODO: 3 Mar 2024 finnish 
         if (description.contains("Aldi")) return BankStatementName.Aldi;
         if (description.contains("Edeka")) return BankStatementName.Edeka;

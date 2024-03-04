@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBManager {
@@ -63,7 +62,7 @@ public class DBManager {
                         "FOREIGN KEY (userAccount_email) REFERENCES userAccount(email)" +
                         "ON DELETE CASCADE " +
                         ");").executeUpdate();
-               // connection.prepareStatement("CREATE TABLE IF NOT EXISTS sessions()");
+                // connection.prepareStatement("CREATE TABLE IF NOT EXISTS sessions()");
             }
         } catch (SQLException exception) {
             throw new RuntimeException("Error while creating default tables", exception);

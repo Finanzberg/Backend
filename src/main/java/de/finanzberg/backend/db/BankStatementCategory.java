@@ -5,9 +5,9 @@ public enum BankStatementCategory {
     // EXPENDITURE
     BASIC_NEEDS,
     MOBILITY,
-    SHOPPING, 
+    SHOPPING,
     HEALTH,
-    FREETIME, 
+    FREETIME,
     RENT,
     INSURANCE,
     PERSONAL_PAYMENT,
@@ -19,7 +19,7 @@ public enum BankStatementCategory {
     UNEMPLOYMENT_BENEFIT,
     CHILD_BENEFIT;
 
-    public static BankStatementCategory analyseCategory(String description){
+    public static BankStatementCategory analyseCategory(String description) {
         if (description.contains("Gehalt")) return BankStatementCategory.SALARY;
         if (description.contains("Lohn")) return BankStatementCategory.SALARY;
         if (description.contains("Entgelt")) return BankStatementCategory.SALARY;

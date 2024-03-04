@@ -12,10 +12,8 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class DataLogic {
@@ -79,7 +77,7 @@ public class DataLogic {
                         resultSet.getDate("startDate").toLocalDate().atStartOfDay().toInstant(ZoneOffset.UTC)
                 );
                 budget.refreshBalance();
-                Budget.save(user, finanzberg, budget);
+                Budget.update(user, finanzberg, budget);
                 budgets.add(budget);
             }
         } catch (Exception exception) {

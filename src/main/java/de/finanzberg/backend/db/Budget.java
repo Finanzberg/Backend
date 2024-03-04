@@ -12,19 +12,18 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.Collection;
 
 public class Budget {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("BankStatement");
 
     private final Finanzberg finanzberg;
-    private String name;
-    private int monthlyBalance;
+    private final String name;
+    private final int monthlyBalance;
     private double balance;
-    private Instant startDate;
+    private final Instant startDate;
 
-    public Budget(Finanzberg finanzberg, String name, int monthlyBalance,double balance , Instant startDate) {
+    public Budget(Finanzberg finanzberg, String name, int monthlyBalance, double balance, Instant startDate) {
         this.finanzberg = finanzberg;
         this.name = name;
         this.monthlyBalance = monthlyBalance;
@@ -32,10 +31,10 @@ public class Budget {
         this.startDate = startDate;
     }
 
-    public static void save(User user, Finanzberg finanzberg, Budget budget) {
+    public static void create(User user, Finanzberg finanzberg, Budget budget) {
         try (Connection connection = finanzberg.getDBManager().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO budget (name,monthlyBalance,balance,startDate, userAccount_email) VALUES (?,?,?,?,?) " +
-                     "ON DUPLICATE KEY UPDATE userAccount_email=userAccount_email");
+                     "ON DUPLICATE KEY UPDATE userAccount_email=userAccount_email")
         ) {
             budget.save(user, preparedStatement);
             preparedStatement.executeUpdate();
@@ -52,6 +51,17 @@ public class Budget {
         statement.setString(5, user.getEmail());
     }
 
+    public static void update(User user, Finanzberg finanzberg, Budget budget) {
+        try (Connection connection = finanzberg.getDBManager().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE budget SET name = ?, monthlyBalance = ?, balance = ?, startDate = ? WHERE userAccount_email = ?")
+        ) {
+            budget.save(user, preparedStatement);
+            preparedStatement.executeUpdate();
+        } catch (Exception exception) {
+            LOGGER.error("Error while saving bank statements", exception);
+        }
+    }
+
     public void refreshBalance() {
         LocalDate start = LocalDate.ofInstant(startDate, ZoneOffset.UTC);
         LocalDate end = LocalDate.now();
@@ -63,8 +73,8 @@ public class Budget {
         JsonObject json = new JsonObject();
         json.addProperty("name", name);
         json.addProperty("monthlyBalance", monthlyBalance);
-        json.addProperty("balance",balance);
-        json.addProperty("startDate",startDate.getEpochSecond());
+        json.addProperty("balance", balance);
+        json.addProperty("startDate", startDate.getEpochSecond());
         return json;
     }
 

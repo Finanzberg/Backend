@@ -11,7 +11,7 @@ import java.util.UUID;
 public class User {
     private final Finanzberg finanzberg;
     private final UUID session = UUID.randomUUID();
-    private String email;
+    private final String email;
     private String name;
     private String password;
     private String avatar;
@@ -31,7 +31,7 @@ public class User {
         String avatar = CipherUtils.byteToString(CipherUtils.encryptAES(this.avatar, finanzberg.getConfig().key), true);
         try (Connection connection = finanzberg.getDBManager().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO userAccount (email, name, password, avatar) VALUES (?,?,?,?) " +
-                     "ON DUPLICATE KEY UPDATE name=?, password=?, avatar=?");
+                     "ON DUPLICATE KEY UPDATE name=?, password=?, avatar=?")
         ) {
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, name);

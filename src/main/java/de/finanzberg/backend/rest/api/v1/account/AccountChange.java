@@ -6,7 +6,6 @@ import de.finanzberg.backend.Finanzberg;
 import de.finanzberg.backend.db.User;
 import de.finanzberg.backend.rest.AuthedWebHandler;
 import de.finanzberg.backend.util.StreamUtils;
-import org.mariadb.jdbc.util.StringUtils;
 
 public class AccountChange extends AuthedWebHandler {
 

@@ -41,7 +41,7 @@ public class Saldo extends AuthedWebHandler {
         int days = (int) ((end.getEpochSecond() - start.getEpochSecond()) / 86400);
 
         Map<Long, Double> map = new HashMap<>(days);
-        Map<Long,Double> results = new HashMap<>();
+        Map<Long, Double> results = new HashMap<>();
 
         for (BankStatement statement : statements) {
             long date = statement.getDate().getEpochSecond();
