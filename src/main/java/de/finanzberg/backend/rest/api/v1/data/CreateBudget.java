@@ -16,7 +16,7 @@ import java.util.List;
 
 public class CreateBudget extends AuthedWebHandler {
 
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("MM.yyyy");
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM");
     public CreateBudget(Finanzberg finanzberg) {
         super(finanzberg);
     }

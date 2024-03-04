@@ -10,6 +10,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.Collection;
 
 public class Budget {
@@ -36,7 +38,7 @@ public class Budget {
                      "ON DUPLICATE KEY UPDATE userAccount_email=userAccount_email");
         ) {
             budget.save(user, preparedStatement);
-            preparedStatement.executeBatch();
+            preparedStatement.executeUpdate();
         } catch (Exception exception) {
             LOGGER.error("Error while saving bank statements", exception);
         }
@@ -47,7 +49,14 @@ public class Budget {
         statement.setInt(2, monthlyBalance);
         statement.setDouble(3, balance);
         statement.setDate(4, new Date(startDate.toEpochMilli()));
-        statement.addBatch();
+        statement.setString(5, user.getEmail());
+    }
+
+    public void refreshBalance() {
+        LocalDate start = LocalDate.ofInstant(startDate, ZoneOffset.UTC);
+        LocalDate end = LocalDate.now();
+        int months = start.until(end).getMonths() + 1;
+        balance = monthlyBalance * months;
     }
 
     public JsonObject toJson() {

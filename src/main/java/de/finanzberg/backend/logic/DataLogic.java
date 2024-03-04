@@ -71,13 +71,16 @@ public class DataLogic {
             preparedStatement.setString(1, user.getEmail());
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                budgets.add(new Budget(
+                Budget budget = new Budget(
                         this.finanzberg,
                         resultSet.getString("name"),
                         resultSet.getInt("percentage"),
                         resultSet.getDouble("balance"),
                         resultSet.getDate("startDate").toLocalDate().atStartOfDay().toInstant(ZoneOffset.UTC)
-                ));
+                );
+                budget.refreshBalance();
+                Budget.save(user, finanzberg, budget);
+                budgets.add(budget);
             }
         } catch (Exception exception) {
             LOGGER.error("Error while loading budgets", exception);
